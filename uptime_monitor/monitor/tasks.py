@@ -25,3 +25,8 @@ def check_url_status():
         url_obj.last_checked = now()
         url_obj.save()
         
+        UptimeHistory.objects.create(
+            monitored_url=url_obj,
+            status=status,
+            checked_at=url_obj.last_checked
+        )
