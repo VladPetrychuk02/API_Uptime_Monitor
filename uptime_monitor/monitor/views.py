@@ -1,10 +1,12 @@
 from rest_framework import viewsets, permissions, filters
+
+from .permissions import IsOwnerPermission
 from .models import MonitoredURL, UptimeHistory
 from .serializers import MonitoredURLSerializer, UptimeHistorySerializer
 
 class MonitoredURLViewSet(viewsets.ModelViewSet):
     serializer_class = MonitoredURLSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerPermission]
 
     def get_queryset(self):
         return MonitoredURL.objects.filter(user=self.request.user)
