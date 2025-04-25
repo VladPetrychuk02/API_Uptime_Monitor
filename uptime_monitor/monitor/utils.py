@@ -10,3 +10,14 @@ def send_status_email(user_email, url, old_status, new_status):
         [user_email],
         fail_silently=False,
     )
+    
+def send_webhook(webhook_url, url, old_status, new_status):
+    payload = {
+        'url': url,
+        'old_status': old_status,
+        'new_status': new_status,
+    }
+    try:
+        requests.post(webhook_url, json=payload, timeout=5)
+    except Exception as e:
+        print(f"Webhook failed: {e}")
