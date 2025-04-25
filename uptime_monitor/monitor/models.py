@@ -21,3 +21,11 @@ class MonitoredURL(models.Model):
 
     def __str__(self):
         return f"{self.url} ({self.status})"
+    
+class UptimeHistory(models.Model):
+    monitored_url = models.ForeignKey(MonitoredURL, on_delete=models.CASCADE, related_name="history")
+    status = models.CharField(max_length=10, choices=MonitoredURL.STATUS_CHOICES)
+    checked_at = models.DateTimeField()
+
+    def __str__(self):
+        return f"{self.monitored_url.url} was {self.status} at {self.checked_at}"
