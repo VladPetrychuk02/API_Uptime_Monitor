@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import MonitoredURL
+from .models import MonitoredURL, UptimeHistory
 
 class MonitoredURLSerializer(serializers.ModelSerializer):
     class Meta:

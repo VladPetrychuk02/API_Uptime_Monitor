@@ -1,3 +1,4 @@
+import requests
 from django.core.mail import send_mail
 
 def send_status_email(user_email, url, old_status, new_status):
@@ -10,7 +11,7 @@ def send_status_email(user_email, url, old_status, new_status):
         [user_email],
         fail_silently=False,
     )
-    
+
 def send_webhook(webhook_url, url, old_status, new_status):
     payload = {
         'url': url,
