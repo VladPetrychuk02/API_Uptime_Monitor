@@ -147,4 +147,4 @@ def test_pagination(auth_client, user):
     data = response.json()
 
     assert 'next' in data
-    assert len(data['results']) == 10  # Page size = 10 за замовчуванням
+    assert len(data['results']) == 10
