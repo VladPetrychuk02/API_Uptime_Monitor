@@ -2,7 +2,7 @@ import pytest
 from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
-from users.models import User
+from django.contrib.auth.models import User
 from monitor.models import MonitoredURL
 
 # The fixture creates the main user
@@ -90,3 +90,61 @@ def test_forbidden_to_retrieve_foreign_url(api_client, another_user, monitored_u
 def test_unauthorized_access(api_client):
     response = api_client.get('/api/monitor/urls/')
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    
+# Test: Successfully updating your URL
+def test_update_monitored_url(auth_client, monitored_url):
+    url = f'/api/monitor/urls/{monitored_url.id}/'
+    response = auth_client.patch(url, {
+        "check_interval": 15
+    })
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['check_interval'] == 15
+
+# Test: Preventing updating others URL
+def test_forbidden_to_update_foreign_url(api_client, another_user, monitored_url):
+    response = api_client.post('/api/token/', {
+        'username': another_user.username,
+        'password': '12345678'
+    })
+    token = response.data['access']
+    api_client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+
+    url = f'/api/monitor/urls/{monitored_url.id}/'
+    response = api_client.patch(url, {"check_interval": 20})
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+# Test: Successfully deleting your URL
+def test_delete_own_monitored_url(auth_client, monitored_url):
+    url = f'/api/monitor/urls/{monitored_url.id}/'
+    response = auth_client.delete(url)
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+
+# Test: Preventing deleting others URL
+def test_forbidden_to_delete_foreign_url(api_client, another_user, monitored_url):
+    response = api_client.post('/api/token/', {
+        'username': another_user.username,
+        'password': '12345678'
+    })
+    token = response.data['access']
+    api_client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+
+    url = f'/api/monitor/urls/{monitored_url.id}/'
+    response = api_client.delete(url)
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+# Test: Checking pagination with a large number of URLs
+@pytest.mark.django_db
+def test_pagination(auth_client, user):
+    for i in range(15):
+        MonitoredURL.objects.create(
+            user=user,
+            url=f'https://example{i}.com',
+            check_interval=5
+        )
+    response = auth_client.get('/api/monitor/urls/')
+    data = response.json()
+
+    assert 'next' in data
+    assert len(data['results']) == 10  # Page size = 10 за замовчуванням
