@@ -1,5 +1,4 @@
 from rest_framework import viewsets, permissions, filters
-
 from .permissions import IsOwnerPermission
 from .models import MonitoredURL, UptimeHistory
 from .serializers import MonitoredURLSerializer, UptimeHistorySerializer
