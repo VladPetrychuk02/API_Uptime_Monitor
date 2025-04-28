@@ -1,3 +1,4 @@
+
 services:
   web:
     build: .
@@ -34,5 +35,16 @@ services:
     depends_on:
       - db
       - redis
+    env_file:
+      - .env
+  celery-beat:
+    build: .
+    command: celery -A uptime_monitor beat --loglevel=info
+    volumes:
+      - .:/code
+    working_dir: /code/uptime_monitor
+    depends_on:
+      - redis
+      - db
     env_file:
       - .env
