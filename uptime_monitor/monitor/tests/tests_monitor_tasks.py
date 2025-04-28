@@ -55,14 +55,12 @@ def test_status_becomes_down(mock_get, monitored_url):
 @pytest.mark.django_db
 @mock.patch('monitor.tasks.requests.get')
 def test_skip_check_before_interval(mock_get, monitored_url):
-    # Встановлюємо last_checked у майбутнє
     monitored_url.last_checked = now() + timedelta(minutes=1)
     monitored_url.save()
     monitored_url.refresh_from_db()
 
     check_url_status()
 
-    # Тепер має бути 0 запитів
     assert mock_get.call_count == 0
 
 # Test: status becomes DOWN on request error
