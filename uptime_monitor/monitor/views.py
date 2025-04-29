@@ -6,6 +6,7 @@ from .serializers import MonitoredURLSerializer, UptimeHistorySerializer
 
 
 class MonitoredURLViewSet(viewsets.ModelViewSet):
+    queryset = MonitoredURL.objects.all().order_by('id')
     serializer_class = MonitoredURLSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwnerPermission]
 
