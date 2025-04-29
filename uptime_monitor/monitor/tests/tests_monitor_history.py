@@ -53,7 +53,7 @@ def monitored_url(user):
         webhook_url='https://webhook.site/test'
     )
 
-# Test: Record is created in UptimeHistory when status changes
+# Test: Record is created
 @pytest.mark.django_db
 @mock.patch('monitor.tasks.requests.get')
 def test_create_uptime_history(mock_get, monitored_url):
@@ -67,7 +67,26 @@ def test_create_uptime_history(mock_get, monitored_url):
     assert uptime_history.status == 'DOWN'
 
 # Test: Get history for user
+@pytest.mark.django_db
+@mock.patch('monitor.tasks.requests.get')
+def test_get_history_for_user(mock_get, auth_client, monitored_url, another_user):
+    MonitoredURL.objects.create(
+        user=another_user,
+        url='https://anotherexample.com',
+        check_interval=1,
+        status='DOWN'
+    )
 
+    mock_response = mock.Mock(status_code=500)
+    mock_get.return_value = mock_response
+    check_url_status()
+
+    response = auth_client.get(reverse('uptime-history-list'))
+    data = response.json()
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(data['results']) == 1
+    assert data['results'][0]['url'] == 'https://example.com'
 
 # Test: Sorting history by time
 @pytest.mark.django_db
@@ -89,7 +108,21 @@ def test_history_sorted_by_time(mock_get, monitored_url):
     assert history_records[0].checked_at <= history_records[1].checked_at
 
 # Test: Filter history by status
+@pytest.mark.django_db
+@mock.patch('monitor.tasks.requests.get')
+def test_history_sorted_by_status(mock_get, monitored_url):
+    mock_response = mock.Mock(status_code=500)
+    mock_get.return_value = mock_response
+    check_url_status()
 
+    monitored_url.status = 'UP'
+    monitored_url.save()
+    mock_get.return_value = mock.Mock(status_code=200)
+    check_url_status()
+
+    history_records = UptimeHistory.objects.all()
+    assert history_records[0].status == 'DOWN'
+    assert history_records[1].status == 'UP'
 
 # Test: Pagination for large history
 @pytest.mark.django_db
@@ -114,11 +147,28 @@ def test_pagination_for_large_history(mock_get, auth_client, user):
     assert 'next' in data
     assert len(data['results']) == 10
 
-# Test: Invalid request format
-
 # Test: Access only own history
+@pytest.mark.django_db
+@mock.patch('monitor.tasks.requests.get')
+def test_access_only_own_history(mock_get, auth_client, monitored_url, another_user):
+    MonitoredURL.objects.create(
+        user=another_user,
+        url='https://anotherexample.com',
+        check_interval=1,
+        status='DOWN'
+    )
 
-    
+    mock_response = mock.Mock(status_code=500)
+    mock_get.return_value = mock_response
+    check_url_status()
+
+    response = auth_client.get(reverse('uptime-history-list'))
+    data = response.json()
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(data['results']) == 1
+    assert data['results'][0]['url'] == 'https://example.com'
+
 # Test: Update existing history record
 @pytest.mark.django_db
 @mock.patch('monitor.tasks.requests.get')
