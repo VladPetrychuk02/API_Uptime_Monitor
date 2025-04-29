@@ -14,9 +14,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='UptimeHistory',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('status', models.CharField(choices=[('UP', 'UP'),
-                 ('DOWN', 'DOWN'), ('UNKNOWN', 'UNKNOWN')], max_length=10)),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
+                ('status', models.CharField(choices=[
+                 ('UP', 'UP'), ('DOWN', 'DOWN'), ('UNKNOWN', 'UNKNOWN')], max_length=10)),
                 ('checked_at', models.DateTimeField()),
                 ('monitored_url', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
                  related_name='history', to='monitor.monitoredurl')),

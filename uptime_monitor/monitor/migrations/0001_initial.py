@@ -17,14 +17,17 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='MonitoredURL',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('url', models.URLField()),
-                ('check_interval', models.IntegerField(default=5, help_text='Check interval in minutes')),
-                ('status', models.CharField(choices=[('UP', 'UP'), ('DOWN', 'DOWN'),
-                 ('UNKNOWN', 'UNKNOWN')], default='UNKNOWN', max_length=10)),
+                ('check_interval', models.IntegerField(
+                    default=5, help_text='Check interval in minutes')),
+                ('status', models.CharField(choices=[
+                 ('UP', 'UP'), ('DOWN', 'DOWN'), ('UNKNOWN', 'UNKNOWN')], default='UNKNOWN', max_length=10)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('last_checked', models.DateTimeField(blank=True, null=True)),
-                ('webhook_url', models.URLField(blank=True, help_text='Optional webhook for alerts', null=True)),
+                ('webhook_url', models.URLField(blank=True,
+                 help_text='Optional webhook for alerts', null=True)),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
                  related_name='urls', to=settings.AUTH_USER_MODEL)),
             ],
