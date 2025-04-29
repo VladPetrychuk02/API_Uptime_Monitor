@@ -5,7 +5,6 @@ from .serializers import MonitoredURLSerializer, UptimeHistorySerializer
 from .mixins import ClearHistoryMixin
 
 
-
 class MonitoredURLViewSet(viewsets.ModelViewSet):
     queryset = MonitoredURL.objects.all().order_by('id')
     serializer_class = MonitoredURLSerializer
