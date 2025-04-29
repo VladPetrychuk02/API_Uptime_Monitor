@@ -4,6 +4,7 @@ from django.utils.timezone import now
 from .models import MonitoredURL, UptimeHistory
 from .utils import send_status_email, send_webhook
 
+
 @shared_task
 def check_url_status():
     urls = MonitoredURL.objects.all()
@@ -24,7 +25,7 @@ def check_url_status():
         url_obj.status = status
         url_obj.last_checked = now()
         url_obj.save()
-        
+
         UptimeHistory.objects.create(
             monitored_url=url_obj,
             status=status,
