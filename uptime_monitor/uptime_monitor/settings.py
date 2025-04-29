@@ -88,8 +88,12 @@ DATABASES = {
     }
 }
 
-CELERY_BROKER_URL = f"redis://{os.getenv('REDIS_HOST')}:{os.getenv('REDIS_PORT')}/0"
-CELERY_RESULT_BACKEND = f"redis://{os.getenv('REDIS_HOST')}:{os.getenv('REDIS_PORT')}/0"
+CELERY_BROKER_URL = f"redis://{
+    os.getenv('REDIS_HOST')}:{
+        os.getenv('REDIS_PORT')}/0"
+CELERY_RESULT_BACKEND = f"redis://{
+    os.getenv('REDIS_HOST')}:{
+        os.getenv('REDIS_PORT')}/0"
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
