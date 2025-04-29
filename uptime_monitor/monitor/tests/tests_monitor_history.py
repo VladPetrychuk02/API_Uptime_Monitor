@@ -1,15 +1,14 @@
 import pytest
 from unittest import mock
-from django.utils.timezone import now
 from django.urls import reverse
 from django.contrib.auth.models import User
-from rest_framework import status
 from rest_framework.test import APIClient
 from monitor.models import MonitoredURL, UptimeHistory
 from monitor.tasks import check_url_status
-from datetime import timedelta
 
 # The fixture creates the main user
+
+
 @pytest.fixture
 def user(db):
     return User.objects.create_user(
@@ -19,6 +18,8 @@ def user(db):
     )
 
 # The second user
+
+
 @pytest.fixture
 def another_user(db):
     return User.objects.create_user(
@@ -27,11 +28,14 @@ def another_user(db):
         email='another@example.com'
     )
 
+
 @pytest.fixture
 def api_client():
     return APIClient()
 
 # API client with JWT authorization
+
+
 @pytest.fixture
 def auth_client(user, api_client):
     response = api_client.post('/api/token/', {
@@ -43,6 +47,8 @@ def auth_client(user, api_client):
     return api_client
 
 # The fixture creates a monitored URL object
+
+
 @pytest.fixture
 def monitored_url(user):
     return MonitoredURL.objects.create(
@@ -54,6 +60,8 @@ def monitored_url(user):
     )
 
 # Test: Record is created in UptimeHistory when status changes
+
+
 @pytest.mark.django_db
 @mock.patch('monitor.tasks.requests.get')
 def test_create_uptime_history(mock_get, monitored_url):
@@ -77,13 +85,11 @@ def test_history_sorted_by_time(mock_get, monitored_url):
     mock_get.return_value = mock_response
 
     check_url_status()
-    first_record_time = now()
 
     monitored_url.status = 'UP'
     monitored_url.save()
 
     check_url_status()
-    second_record_time = now()
 
     history_records = UptimeHistory.objects.all()
     assert history_records[0].checked_at <= history_records[1].checked_at
@@ -102,7 +108,6 @@ def test_pagination_for_large_history(mock_get, auth_client, user):
             check_interval=5
         )
 
-    monitored_url = MonitoredURL.objects.first()
     mock_response = mock.Mock(status_code=500)
     mock_get.return_value = mock_response
 
@@ -118,7 +123,7 @@ def test_pagination_for_large_history(mock_get, auth_client, user):
 
 # Test: Access only own history
 
-    
+
 # Test: Update existing history record
 @pytest.mark.django_db
 @mock.patch('monitor.tasks.requests.get')

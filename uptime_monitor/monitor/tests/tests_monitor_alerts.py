@@ -1,11 +1,11 @@
 import pytest
 from unittest import mock
-from django.utils.timezone import now
 from monitor.models import MonitoredURL
 from monitor.tasks import check_url_status
-from datetime import timedelta
 
 # The fixture creates the main user
+
+
 @pytest.fixture
 def user(db):
     from django.contrib.auth.models import User
@@ -16,6 +16,8 @@ def user(db):
     )
 
 # The fixture creates a monitored URL object
+
+
 @pytest.fixture
 def monitored_url(user):
     return MonitoredURL.objects.create(
@@ -27,6 +29,8 @@ def monitored_url(user):
     )
 
 # Test: Email is sent when status changes
+
+
 @pytest.mark.django_db
 @mock.patch('monitor.tasks.send_status_email')
 @mock.patch('monitor.tasks.requests.get')
@@ -39,6 +43,8 @@ def test_email_sent_on_status_change(mock_get, mock_send_email, monitored_url):
     assert mock_send_email.call_count == 1
 
 # Test: Webhook is sent when status changes
+
+
 @pytest.mark.django_db
 @mock.patch('monitor.tasks.send_webhook')
 @mock.patch('monitor.tasks.requests.get')
@@ -51,6 +57,8 @@ def test_webhook_sent_on_status_change(mock_get, mock_send_webhook, monitored_ur
     assert mock_send_webhook.call_count == 1
 
 # Test: No email/webhook if status doesn't change
+
+
 @pytest.mark.django_db
 @mock.patch('monitor.tasks.send_status_email')
 @mock.patch('monitor.tasks.send_webhook')
@@ -65,6 +73,8 @@ def test_no_email_no_webhook_if_status_unchanged(mock_get, mock_send_webhook, mo
     assert mock_send_webhook.call_count == 0
 
 # Test: No email sent if user has no email
+
+
 @pytest.mark.django_db
 @mock.patch('monitor.tasks.send_status_email')
 @mock.patch('monitor.tasks.requests.get')
@@ -78,8 +88,10 @@ def test_no_email_if_user_has_no_email(mock_get, mock_send_email, monitored_url)
     check_url_status()
 
     assert mock_send_email.call_count == 1
-    
+
 # 5. Test: No webhook sent if webhook_url is empty
+
+
 @pytest.mark.django_db
 @mock.patch('monitor.tasks.send_webhook')
 @mock.patch('monitor.tasks.requests.get')
@@ -95,6 +107,8 @@ def test_no_webhook_if_no_webhook_url(mock_get, mock_send_webhook, monitored_url
     assert mock_send_webhook.call_count == 0
 
 # Test: Email content contains correct status
+
+
 @pytest.mark.django_db
 @mock.patch('monitor.tasks.send_status_email')
 @mock.patch('monitor.tasks.requests.get')
@@ -111,6 +125,8 @@ def test_email_content_correct(mock_get, mock_send_email, monitored_url):
     assert 'DOWN' in args
 
 # Test: Webhook payload contains correct data
+
+
 @pytest.mark.django_db
 @mock.patch('monitor.tasks.send_webhook')
 @mock.patch('monitor.tasks.requests.get')
@@ -127,6 +143,8 @@ def test_webhook_payload_correct(mock_get, mock_send_webhook, monitored_url):
     assert 'DOWN' in args
 
 # Test: Alerts are sent only once per status change
+
+
 @pytest.mark.django_db
 @mock.patch('monitor.tasks.send_status_email')
 @mock.patch('monitor.tasks.send_webhook')
