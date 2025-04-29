@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+
 class MonitoredURL(models.Model):
     STATUS_CHOICES = (
         ('UP', 'UP'),
@@ -21,7 +22,8 @@ class MonitoredURL(models.Model):
 
     def __str__(self):
         return f"{self.url} ({self.status})"
-    
+
+
 class UptimeHistory(models.Model):
     monitored_url = models.ForeignKey(MonitoredURL, on_delete=models.CASCADE, related_name="history")
     status = models.CharField(max_length=10, choices=MonitoredURL.STATUS_CHOICES)

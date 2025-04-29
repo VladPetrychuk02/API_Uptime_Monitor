@@ -4,6 +4,7 @@ from .permissions import IsOwnerPermission
 from .models import MonitoredURL, UptimeHistory
 from .serializers import MonitoredURLSerializer, UptimeHistorySerializer
 
+
 class MonitoredURLViewSet(viewsets.ModelViewSet):
     queryset = MonitoredURL.objects.all().order_by('id')
     serializer_class = MonitoredURLSerializer
@@ -14,7 +15,8 @@ class MonitoredURLViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-        
+
+
 class UptimeHistoryViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = UptimeHistorySerializer
     permission_classes = [permissions.IsAuthenticated]
