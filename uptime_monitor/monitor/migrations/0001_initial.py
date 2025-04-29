@@ -17,7 +17,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='MonitoredURL',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('url', models.URLField()),
                 ('check_interval', models.IntegerField(default=5, help_text='Check interval in minutes')),
                 ('status', models.CharField(choices=[('UP', 'UP'), ('DOWN', 'DOWN'),
