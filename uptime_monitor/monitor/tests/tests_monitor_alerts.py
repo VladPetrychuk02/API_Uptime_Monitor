@@ -48,7 +48,8 @@ def test_email_sent_on_status_change(mock_get, mock_send_email, monitored_url):
 @pytest.mark.django_db
 @mock.patch('monitor.tasks.send_webhook')
 @mock.patch('monitor.tasks.requests.get')
-def test_webhook_sent_on_status_change(mock_get, mock_send_webhook, monitored_url):
+def test_webhook_sent_on_status_change(
+        mock_get, mock_send_webhook, monitored_url):
     mock_response = mock.Mock(status_code=500)
     mock_get.return_value = mock_response
 
@@ -63,7 +64,8 @@ def test_webhook_sent_on_status_change(mock_get, mock_send_webhook, monitored_ur
 @mock.patch('monitor.tasks.send_status_email')
 @mock.patch('monitor.tasks.send_webhook')
 @mock.patch('monitor.tasks.requests.get')
-def test_no_email_no_webhook_if_status_unchanged(mock_get, mock_send_webhook, mock_send_email, monitored_url):
+def test_no_email_no_webhook_if_status_unchanged(
+        mock_get, mock_send_webhook, mock_send_email, monitored_url):
     mock_response = mock.Mock(status_code=200)  # still UP
     mock_get.return_value = mock_response
 
@@ -78,7 +80,8 @@ def test_no_email_no_webhook_if_status_unchanged(mock_get, mock_send_webhook, mo
 @pytest.mark.django_db
 @mock.patch('monitor.tasks.send_status_email')
 @mock.patch('monitor.tasks.requests.get')
-def test_no_email_if_user_has_no_email(mock_get, mock_send_email, monitored_url):
+def test_no_email_if_user_has_no_email(
+        mock_get, mock_send_email, monitored_url):
     monitored_url.user.email = ''
     monitored_url.user.save()
 
@@ -95,7 +98,8 @@ def test_no_email_if_user_has_no_email(mock_get, mock_send_email, monitored_url)
 @pytest.mark.django_db
 @mock.patch('monitor.tasks.send_webhook')
 @mock.patch('monitor.tasks.requests.get')
-def test_no_webhook_if_no_webhook_url(mock_get, mock_send_webhook, monitored_url):
+def test_no_webhook_if_no_webhook_url(
+        mock_get, mock_send_webhook, monitored_url):
     monitored_url.webhook_url = ''
     monitored_url.save()
 
@@ -149,7 +153,11 @@ def test_webhook_payload_correct(mock_get, mock_send_webhook, monitored_url):
 @mock.patch('monitor.tasks.send_status_email')
 @mock.patch('monitor.tasks.send_webhook')
 @mock.patch('monitor.tasks.requests.get')
-def test_alerts_sent_only_once_per_change(mock_get, mock_send_webhook, mock_send_email, monitored_url):
+def test_alerts_sent_only_once_per_change(
+        mock_get,
+        mock_send_webhook,
+        mock_send_email,
+        monitored_url):
     mock_response = mock.Mock(status_code=500)
     mock_get.return_value = mock_response
 

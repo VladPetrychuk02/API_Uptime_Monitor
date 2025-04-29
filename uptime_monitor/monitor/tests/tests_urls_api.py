@@ -88,7 +88,8 @@ def test_only_own_urls_visible(auth_client, monitored_url, another_user):
 # Test: other people's URLs are not available
 
 
-def test_forbidden_to_retrieve_foreign_url(api_client, another_user, monitored_url):
+def test_forbidden_to_retrieve_foreign_url(
+        api_client, another_user, monitored_url):
     response = api_client.post('/api/token/', {
         'username': another_user.username,
         'password': '12345678'
@@ -122,7 +123,8 @@ def test_update_monitored_url(auth_client, monitored_url):
 # Test: Preventing updating others URL
 
 
-def test_forbidden_to_update_foreign_url(api_client, another_user, monitored_url):
+def test_forbidden_to_update_foreign_url(
+        api_client, another_user, monitored_url):
     response = api_client.post('/api/token/', {
         'username': another_user.username,
         'password': '12345678'
@@ -146,7 +148,8 @@ def test_delete_own_monitored_url(auth_client, monitored_url):
 # Test: Preventing deleting others URL
 
 
-def test_forbidden_to_delete_foreign_url(api_client, another_user, monitored_url):
+def test_forbidden_to_delete_foreign_url(
+        api_client, another_user, monitored_url):
     response = api_client.post('/api/token/', {
         'username': another_user.username,
         'password': '12345678'

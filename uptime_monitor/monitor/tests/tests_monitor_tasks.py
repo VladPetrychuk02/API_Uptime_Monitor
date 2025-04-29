@@ -77,7 +77,8 @@ def test_skip_check_before_interval(mock_get, monitored_url):
 
 
 @pytest.mark.django_db
-@mock.patch('monitor.tasks.requests.get', side_effect=Exception('Connection error'))
+@mock.patch('monitor.tasks.requests.get',
+            side_effect=Exception('Connection error'))
 def test_status_becomes_down_on_error(mock_get, monitored_url):
     check_url_status()
 

@@ -6,7 +6,8 @@ from monitor.models import UptimeHistory
 
 
 class ClearHistoryMixin:
-    @action(detail=False, methods=["delete"], permission_classes=[IsAuthenticated])
+    @action(detail=False, methods=["delete"],
+            permission_classes=[IsAuthenticated])
     def clear_history(self, request):
         UptimeHistory.objects.filter(monitored_url__user=request.user).delete()
 
