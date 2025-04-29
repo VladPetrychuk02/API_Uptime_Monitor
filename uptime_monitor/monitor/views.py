@@ -1,8 +1,8 @@
 from rest_framework import viewsets, permissions, filters
-
 from .permissions import IsOwnerPermission
 from .models import MonitoredURL, UptimeHistory
 from .serializers import MonitoredURLSerializer, UptimeHistorySerializer
+from .mixins import ClearHistoryMixin
 
 
 class MonitoredURLViewSet(viewsets.ModelViewSet):
@@ -17,7 +17,7 @@ class MonitoredURLViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-class UptimeHistoryViewSet(viewsets.ReadOnlyModelViewSet):
+class UptimeHistoryViewSet(ClearHistoryMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = UptimeHistorySerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.OrderingFilter, filters.SearchFilter]
