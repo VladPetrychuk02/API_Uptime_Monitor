@@ -1,11 +1,12 @@
 import pytest
-from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 from django.contrib.auth.models import User
 from monitor.models import MonitoredURL
 
 # The fixture creates the main user
+
+
 @pytest.fixture
 def user(db):
     return User.objects.create_user(
@@ -15,6 +16,8 @@ def user(db):
     )
 
 # The second user
+
+
 @pytest.fixture
 def another_user(db):
     return User.objects.create_user(
@@ -24,11 +27,15 @@ def another_user(db):
     )
 
 # API client without authorization
+
+
 @pytest.fixture
 def api_client():
     return APIClient()
 
 # API client with JWT authorization
+
+
 @pytest.fixture
 def auth_client(user, api_client):
     response = api_client.post('/api/token/', {
@@ -40,6 +47,8 @@ def auth_client(user, api_client):
     return api_client
 
 # Creating a URL that the main user monitors
+
+
 @pytest.fixture
 def monitored_url(user):
     return MonitoredURL.objects.create(
@@ -49,6 +58,8 @@ def monitored_url(user):
     )
 
 # Test: an authorized user can create a URL
+
+
 def test_create_monitored_url(auth_client):
     response = auth_client.post('/api/monitor/urls/', {
         "url": "https://example.com",
@@ -58,6 +69,8 @@ def test_create_monitored_url(auth_client):
     assert response.data['url'] == 'https://example.com'
 
 # Test: the user sees only their own URLs
+
+
 def test_only_own_urls_visible(auth_client, monitored_url, another_user):
     MonitoredURL.objects.create(
         user=another_user,
@@ -73,6 +86,8 @@ def test_only_own_urls_visible(auth_client, monitored_url, another_user):
     assert urls['results'][0]['url'] == 'https://google.com'
 
 # Test: other people's URLs are not available
+
+
 def test_forbidden_to_retrieve_foreign_url(api_client, another_user, monitored_url):
     response = api_client.post('/api/token/', {
         'username': another_user.username,
@@ -87,11 +102,15 @@ def test_forbidden_to_retrieve_foreign_url(api_client, another_user, monitored_u
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
 # Test: other people's URLs are not available
+
+
 def test_unauthorized_access(api_client):
     response = api_client.get('/api/monitor/urls/')
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    
+
 # Test: Successfully updating your URL
+
+
 def test_update_monitored_url(auth_client, monitored_url):
     url = f'/api/monitor/urls/{monitored_url.id}/'
     response = auth_client.patch(url, {
@@ -101,6 +120,8 @@ def test_update_monitored_url(auth_client, monitored_url):
     assert response.data['check_interval'] == 15
 
 # Test: Preventing updating others URL
+
+
 def test_forbidden_to_update_foreign_url(api_client, another_user, monitored_url):
     response = api_client.post('/api/token/', {
         'username': another_user.username,
@@ -115,12 +136,16 @@ def test_forbidden_to_update_foreign_url(api_client, another_user, monitored_url
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
 # Test: Successfully deleting your URL
+
+
 def test_delete_own_monitored_url(auth_client, monitored_url):
     url = f'/api/monitor/urls/{monitored_url.id}/'
     response = auth_client.delete(url)
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
 # Test: Preventing deleting others URL
+
+
 def test_forbidden_to_delete_foreign_url(api_client, another_user, monitored_url):
     response = api_client.post('/api/token/', {
         'username': another_user.username,
@@ -135,6 +160,8 @@ def test_forbidden_to_delete_foreign_url(api_client, another_user, monitored_url
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
 # Test: Checking pagination with a large number of URLs
+
+
 @pytest.mark.django_db
 def test_pagination(auth_client, user):
     for i in range(15):

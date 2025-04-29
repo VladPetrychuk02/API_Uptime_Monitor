@@ -1,6 +1,6 @@
 from .forms import CustomUserCreationForm
 from django.views.generic.edit import FormView
-from django.urls import reverse_lazy
+
 
 class RegisterView(FormView):
     template_name = 'users/register.html'
