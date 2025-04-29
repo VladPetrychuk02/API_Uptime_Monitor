@@ -120,5 +120,5 @@ jobs:
       - name: Run migrations
         run: python uptime_monitor/manage.py migrate
 
-      - name: Run blog tests
+      - name: Run Uptime_Monitor tests
         run: pytest uptime_monitor/monitor/tests
