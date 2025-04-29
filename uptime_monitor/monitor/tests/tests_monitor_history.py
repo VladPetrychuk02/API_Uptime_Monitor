@@ -2,7 +2,6 @@ import pytest
 from unittest import mock
 from django.urls import reverse
 from django.contrib.auth.models import User
-from rest_framework import status
 from rest_framework.test import APIClient
 from monitor.models import MonitoredURL, UptimeHistory
 from monitor.tasks import check_url_status
@@ -59,6 +58,7 @@ def monitored_url(user):
         status='UP',
         webhook_url='https://webhook.site/test'
     )
+
 
 # Test: Record is created
 
