@@ -101,13 +101,26 @@ docker-compose exec web alembic upgrade head
   - URLs stats: `http://127.0.0.1:8000/api/monitor/stats/`
   - Run 'check status' task: `http://127.0.0.1:8000/run-task/`
 
+## User Guide:
+1. To register, go to the link `http://127.0.0.1:8000/auth/register/`
+2. Register by specifying your username, password and email
+3. For further work, go to the link `http://127.0.0.1:8000/api/users/token` and get a token
+4. To add your URL for verification, go to this link `http://127.0.0.1:8000/api/monitor/urls/` and specify the URL itself, interval, URL Webhook and your ID
+5. After adding the URL that needs to be checked, you need to run the task for checking by going here `http://127.0.0.1:8000/run-task/`
+6. After running the task, you will be sent an update on the current status of your URL on the Webhook
+7. To view the history, go here `http://127.0.0.1:8000/api/monitor/history/`
+8. To check the statistics of how many sites passed/failed, go here `http://127.0.0.1:8000/api/monitor/stats/`
+9. You are great!
+
 ## Important Notes:
 - To work with Webhook notifications, specify the Webhook URL when adding a URL to check.
+- Also don't forget to add your id!
 Example:
 ```
 {
     "url": "https://example.com",
     "check_interval": 5
-    "webhook_url": "your-webhook-url"
+    "webhook_url": "your-webhook-url",
+    "user_id": 1
 }
 ```
