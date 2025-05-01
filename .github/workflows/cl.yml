@@ -3,14 +3,17 @@ name: CI Pipeline
 on:
   push:
     branches:
-      - develop
+      - FastAPI/develop
+      - Django/develop
       - feature/dashboard
       - feature/healthcheck
       - feature/alerts
       - feature/history
+      - migration_to_FastAPI
   pull_request:
     branches:
-      - develop
+      - FastAPI/develop
+      - Django/develop
 
 jobs:
   style-check:
