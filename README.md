@@ -16,8 +16,6 @@ This project includes:
 - **Celery** — for asynchronous tasks and periodic checks.
 - **Redis** — for managing queues of tasks that are executed asynchronously
 - **PostgreSQL** — for storing data (URLs, status history).
-- **Django** — for user management, authentication, and database.
-- **JWT** — for secure user authentication.
 - **Docker** — for containerizing the application and database.
 - **Celery Beat** — for scheduling periodic tasks.
 
@@ -81,38 +79,35 @@ This command will start:
 - Redis (for use with Celery).
 - Celery (to check the availability of sites at a given interval).
 - Celery Beat (execution of tasks according to a certain schedule).
-- Web server for FastAPI and Django.
+- FastAPI web server.
 
 ### 5. Install dependencies inside Docker containers
 ```
 docker-compose exec web pip install -r requirements.txt
 ```
 
-6. Run database migrations
+### 6. Run database migrations
 ```
-docker-compose exec web python uptime_monitor/manage.py migrate
-```
-
-7. Create a superuser (for accessing the Django admin panel)
-```
-docker-compose exec web python uptime_monitor/manage.py createsuperuser
+docker-compose exec web alembic upgrade head
 ```
 
-8. Run tests
-To run the tests, use the following command:
-```
-docker-compose exec web pytest uptime_monitor/monitor/tests 
-```
-
-9. Access the API
+### 7. Access the API
 
 - **API endpoints**:
   - URLs: `http://127.0.0.1:8000/api/monitor/urls/`
   - Uptime History: `http://127.0.0.1:8000/api/monitor/history/`
   - Register page: `http://127.0.0.1:8000/auth/register/`
-- **Admin panel**: `http://127.0.0.1:8000/admin` (for accessing the Django admin panel).
+  - Getting users token: `http://127.0.0.1:8000/api/users/token`
+  - URLs stats: `http://127.0.0.1:8000/api/monitor/stats/`
+  - Run 'check status' task: `http://127.0.0.1:8000/run-task/`
 
-**Important Notes**:
-- For email notifications to work correctly, set up the corresponding SMTP server.
-- To work with Webhook notifications, specify the URL in the user settings.
-
+## Important Notes:
+- To work with Webhook notifications, specify the Webhook URL when adding a URL to check.
+Example:
+```
+{
+    "url": "https://example.com",
+    "check_interval": 5
+    "webhook_url": "your-webhook-url"
+}
+```
