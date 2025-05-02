@@ -1,14 +1,13 @@
+from uptime_monitor.database import MonitoredURL, UptimeHistory, User  # noqa: F401
+from uptime_monitor.database import Base
 import os
 import sys
 from dotenv import load_dotenv
-from logging.config import fileConfig
+from logging.config import fileConfig  # noqa: F401
 from sqlalchemy import engine_from_config, pool
 from alembic import context
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
-
-from uptime_monitor.database import Base
-from uptime_monitor.database import MonitoredURL, UptimeHistory, User
 
 
 load_dotenv()
@@ -41,6 +40,7 @@ def run_migrations_offline():
     with context.begin_transaction():
         context.run_migrations()
 
+
 def run_migrations_online():
     connectable = engine_from_config(
         config.get_section(config.config_ini_section),
@@ -53,6 +53,7 @@ def run_migrations_online():
         )
         with context.begin_transaction():
             context.run_migrations()
+
 
 if context.is_offline_mode():
     run_migrations_offline()

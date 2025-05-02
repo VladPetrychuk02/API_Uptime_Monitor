@@ -1,14 +1,14 @@
 """Added user_id and relationships
 
 Revision ID: d6e67b6911f9
-Revises: 
+Revises:
 Create Date: 2025-05-01 14:42:51.141468
 
 """
 from typing import Sequence, Union
 
-from alembic import op
-import sqlalchemy as sa
+from alembic import op  # noqa: F401
+import sqlalchemy as sa  # noqa: F401
 
 
 # revision identifiers, used by Alembic.
