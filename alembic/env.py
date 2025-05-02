@@ -1,11 +1,12 @@
-from uptime_monitor.database import MonitoredURL, UptimeHistory, User  # noqa: F401
-from uptime_monitor.database import Base
 import os
 import sys
 from dotenv import load_dotenv
 from logging.config import fileConfig  # noqa: F401
 from sqlalchemy import engine_from_config, pool
 from alembic import context
+
+from uptime_monitor.uptime_monitor.database import MonitoredURL, UptimeHistory, User  # noqa: F401
+from uptime_monitor.uptime_monitor.database import Base
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 
