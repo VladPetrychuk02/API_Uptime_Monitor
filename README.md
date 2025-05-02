@@ -14,10 +14,10 @@ This project includes:
 
 - **FastAPI** — for building a high-performance REST API.
 - **Celery** — for asynchronous tasks and periodic checks.
+- **Celery Beat** — for scheduling periodic tasks.
 - **Redis** — for managing queues of tasks that are executed asynchronously
 - **PostgreSQL** — for storing data (URLs, status history).
 - **Docker** — for containerizing the application and database.
-- **Celery Beat** — for scheduling periodic tasks.
 
 ## Features of the Project
 
