@@ -10,6 +10,26 @@ def create_monitored_url(db: Session, user_id: int, url: str, check_interval: in
     return db_url
 
 
+def update_monitored_url(db: Session, url_id: int, updated_data: dict):
+    url = db.query(MonitoredURL).filter(MonitoredURL.id == url_id).first()
+    if not url:
+        return None
+    for key, value in updated_data.items():
+        setattr(url, key, value)
+    db.commit()
+    db.refresh(url)
+    return url
+
+
+def delete_monitored_url(db: Session, url_id: int):
+    url = db.query(MonitoredURL).filter(MonitoredURL.id == url_id).first()
+    if not url:
+        return None
+    db.delete(url)
+    db.commit()
+    return url
+
+
 def get_all_monitored_urls(db: Session):
     return db.query(MonitoredURL).all()
 

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 from datetime import datetime
 from typing import Optional
@@ -8,7 +8,7 @@ from uptime_monitor.auth import get_current_user
 from uptime_monitor.database import SessionLocal, User
 from uptime_monitor.database import MonitoredURL as MonitoredURLModel, UptimeHistory as UptimeHistoryModel
 from monitor.schemas import MonitoredURLCreate, MonitoredURL, UptimeHistory as UptimeHistorySchema
-from .crud import create_monitored_url, get_all_monitored_urls, get_uptime_history
+from .crud import create_monitored_url, get_all_monitored_urls, get_uptime_history, update_monitored_url, delete_monitored_url
 
 
 router = APIRouter()
@@ -33,6 +33,40 @@ def get_urls(
     current_user: User = Depends(get_current_user)
 ):
     return get_all_monitored_urls(db)
+
+
+@router.put("/urls/{url_id}/", response_model=MonitoredURL)
+def update_url(
+    url_id: int,
+    updated_data: MonitoredURLCreate,  # або окрему Update-схему
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    url = db.query(MonitoredURLModel).filter(
+        MonitoredURLModel.id == url_id,
+        MonitoredURLModel.user_id == current_user.id
+    ).first()
+    if not url:
+        raise HTTPException(status_code=404, detail="URL not found")
+
+    return update_monitored_url(db, url_id, updated_data.dict())
+
+
+@router.delete("/urls/{url_id}/")
+def delete_url(
+    url_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    url = db.query(MonitoredURLModel).filter(
+        MonitoredURLModel.id == url_id,
+        MonitoredURLModel.user_id == current_user.id
+    ).first()
+    if not url:
+        raise HTTPException(status_code=404, detail="URL not found")
+
+    delete_monitored_url(db, url_id)
+    return {"message": "URL deleted successfully"}
 
 
 @router.get("/history/", response_model=list[UptimeHistorySchema])
