@@ -13,6 +13,7 @@ def create_monitored_url(db: Session, user_id: int, url: str, check_interval: in
 def get_all_monitored_urls(db: Session):
     return db.query(MonitoredURL).all()
 
+
 def get_uptime_history(db: Session, user_id: int, from_date=None, to_date=None):
     query = (
         db.query(UptimeHistory)
@@ -27,10 +28,12 @@ def get_uptime_history(db: Session, user_id: int, from_date=None, to_date=None):
 
     return query.order_by(UptimeHistory.checked_at.desc()).all()
 
+
 def update_monitored_url_status(db: Session, url_obj: MonitoredURL, new_status: str):
     url_obj.status = new_status
     db.merge(url_obj)
     db.commit()
+
 
 def create_uptime_history(db: Session, url_id: int, status: str, checked_at: str, check_interval: int, url: str):
     db_history = UptimeHistory(

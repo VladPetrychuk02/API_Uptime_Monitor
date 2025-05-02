@@ -13,6 +13,7 @@ from .crud import create_monitored_url, get_all_monitored_urls, get_uptime_histo
 
 router = APIRouter()
 
+
 def get_db():
     db = SessionLocal()
     try:
@@ -20,9 +21,11 @@ def get_db():
     finally:
         db.close()
 
+
 @router.post("/urls/", response_model=MonitoredURL)
 def create_monitored_url_endpoint(url: MonitoredURLCreate, db: Session = Depends(get_db)):
     return create_monitored_url(db, url.user_id, url.url, url.check_interval, url.webhook_url)
+
 
 @router.get("/urls/", response_model=list[MonitoredURL])
 def get_urls(
@@ -30,6 +33,7 @@ def get_urls(
     current_user: User = Depends(get_current_user)
 ):
     return get_all_monitored_urls(db)
+
 
 @router.get("/history/", response_model=list[UptimeHistorySchema])
 def get_uptime_history_endpoint(
@@ -39,6 +43,7 @@ def get_uptime_history_endpoint(
     to_date: Optional[datetime] = Query(None, alias="to")
 ):
     return get_uptime_history(db, current_user.id, from_date, to_date)
+
 
 @router.get("/stats/")
 def get_uptime_status_stats(

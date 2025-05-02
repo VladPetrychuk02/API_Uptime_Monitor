@@ -9,6 +9,7 @@ from .crud import create_uptime_history, update_monitored_url_status
 
 logger = logging.getLogger(__name__)
 
+
 class URLStatusChecker:
     def __init__(self, url_obj):
         self.url_obj = url_obj
