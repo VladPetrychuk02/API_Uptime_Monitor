@@ -4,10 +4,8 @@ from fastapi.security import OAuth2PasswordBearer  # noqa: F401
 
 from uptime_monitor.database import Base, engine, User  # noqa: F401
 from monitor.api import router as monitor_router
-from monitor import tasks  # noqa: F401
 from users.api import router as users_router
-from monitor.tasks import check_url_status
-
+from monitor.tasks import check_url_status  # noqa: F401
 
 Base.metadata.create_all(bind=engine)
 
@@ -17,12 +15,6 @@ app = FastAPI()
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
-
-
-@app.get("/run-task/")
-def run_task():
-    check_url_status.delay()
-    return {"status": "task triggered"}
 
 
 app.include_router(monitor_router, prefix="/api/monitor", tags=["monitor"])
