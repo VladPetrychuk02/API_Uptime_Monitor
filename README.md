@@ -154,9 +154,10 @@ docker-compose exec web pytest uptime_monitor/monitor/tests
 
 - **API endpoints**:
   - URLs: `http://127.0.0.1:8000/api/monitor/urls/`
-  - Uptime History: `http://127.0.0.1:8000/api/monitor/history/`
   - Register page: `http://127.0.0.1:8000/auth/register/`
   - Getting users token: `http://127.0.0.1:8000/api/users/token`
+  - Update/Delete URLs: `http://127.0.0.1:8000/api/monitor/urls/{id}`
+  - Uptime History: `http://127.0.0.1:8000/api/monitor/history/`
   - URLs stats: `http://127.0.0.1:8000/api/monitor/stats/`
 
 ## User Guide:
@@ -167,7 +168,9 @@ docker-compose exec web pytest uptime_monitor/monitor/tests
 5. After adding the URL a status check task is started. You will receive periodic notifications about changes in the status of your URL on the Webhook
 6. To view the history, go here `http://127.0.0.1:8000/api/monitor/history/`
 7. To check the statistics of how many sites passed/failed, go here `http://127.0.0.1:8000/api/monitor/stats/`
-8. You are great!
+8. If you want to update your URL data, follow this path `http://127.0.0.1:8000/api/monitor/urls/{id}` by specifying the URL ID and update the necessary information.
+9. To delete a URL, also follow this path `http://127.0.0.1:8000/api/monitor/urls/{id}` by specifying the URL ID you want to delete and click Delete.
+10. You are great!
 
 ## Important Notes:
 - To work with Webhook notifications specify the Webhook URL when adding a URL to check.
