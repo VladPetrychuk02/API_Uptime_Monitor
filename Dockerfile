@@ -7,7 +7,7 @@ ENV PYTHONPATH=/code/uptime_monitor
 WORKDIR /code
 
 COPY requirements.txt ./
-RUN pip install --upgrade pip && pip install -r requirements.txt && pip install psycopg2-binary
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 COPY . .
 
