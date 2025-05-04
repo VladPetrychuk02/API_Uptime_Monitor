@@ -48,11 +48,11 @@ Before starting, it is advisable to check for the presence of these programs
 - Celery
 
 ### 1. Clone the repository
-
 ```
 git clone https://github.com/VladPetrychuk02/API_Uptime_Monitor
 cd API_Uptime_Monitor
 ```
+
 2. Create and activate a virtual environment
 ```
 python3 -m venv venv
@@ -94,22 +94,23 @@ docker-compose exec web alembic upgrade head
 
 - **API endpoints**:
   - URLs: `http://127.0.0.1:8000/api/monitor/urls/`
-  - Uptime History: `http://127.0.0.1:8000/api/monitor/history/`
   - Register page: `http://127.0.0.1:8000/auth/register/`
   - Getting users token: `http://127.0.0.1:8000/api/users/token`
+  - Update/Delete URLs: `http://127.0.0.1:8000/api/monitor/urls/{id}`
+  - Uptime History: `http://127.0.0.1:8000/api/monitor/history/`
   - URLs stats: `http://127.0.0.1:8000/api/monitor/stats/`
-  - Run 'check status' task: `http://127.0.0.1:8000/run-task/`
 
 ## User Guide:
 1. To register, go to the link `http://127.0.0.1:8000/auth/register/`
 2. Register by specifying your username, password and email
 3. For further work, go to the link `http://127.0.0.1:8000/api/users/token` and get a token
 4. To add your URL for verification, go to this link `http://127.0.0.1:8000/api/monitor/urls/` and specify the URL itself, interval, URL Webhook and your ID
-5. After adding the URL that needs to be checked, you need to run the task for checking by going here `http://127.0.0.1:8000/run-task/`
-6. After running the task, you will be sent an update on the current status of your URL on the Webhook
-7. To view the history, go here `http://127.0.0.1:8000/api/monitor/history/`
-8. To check the statistics of how many sites passed/failed, go here `http://127.0.0.1:8000/api/monitor/stats/`
-9. You are great!
+5. After adding the URL a status check task is started. You will receive periodic notifications about changes in the status of your URL on the Webhook
+6. To view the history, go here `http://127.0.0.1:8000/api/monitor/history/`
+7. To check the statistics of how many sites passed/failed, go here `http://127.0.0.1:8000/api/monitor/stats/`
+8. If you want to update your URL data, follow this path `http://127.0.0.1:8000/api/monitor/urls/{id}` by specifying the URL ID and update the necessary information.
+9. To delete a URL, also follow this path `http://127.0.0.1:8000/api/monitor/urls/{id}` by specifying the URL ID you want to delete and click Delete.
+10. You are great!
 
 ## Important Notes:
 - To work with Webhook notifications, specify the Webhook URL when adding a URL to check.
