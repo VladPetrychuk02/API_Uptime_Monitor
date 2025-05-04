@@ -31,8 +31,7 @@ This project includes:
    - Automatic site availability checks via HTTP requests.
 
 3. **Email or Webhook Alerts**:
-   - Email notifications when the status of a URL changes (e.g., from "UP" to "DOWN" and vice versa).
-   - Ability to set up a **Webhook** to receive notifications via HTTP POST requests.
+   - Ability to set up a **Webhook** to receive notifications via HTTP POST requests when the status of a URL changes (e.g., from "UP" to "DOWN" and vice versa).
 
 4. **Uptime History as a Time Series**:
    - Storing the status change history of URLs as a time series.
