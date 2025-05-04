@@ -56,8 +56,8 @@ cd API_Uptime_Monitor
 2. Create and activate a virtual environment
 ```
 python3 -m venv venv
-source venv/bin/activate  # Для Linux
-venv/Scripts/activate  # Для Windows
+source venv/bin/activate  # For Linux
+venv/Scripts/activate  # For Windows
 ```
 
 3. Install dependencies
