@@ -7,7 +7,7 @@
 This project includes:
 - **REST API** for registering and managing URL monitoring.
 - **Periodic checks** of URL status using **Celery**.
-- Alerts via **Email** and **Webhook**.
+- Alerts via **Webhook**.
 - Storing status history as a time series, accessible via the API.
 
 ## Technologies Used
