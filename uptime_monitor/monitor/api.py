@@ -38,7 +38,7 @@ def get_urls(
 @router.put("/urls/{url_id}/", response_model=MonitoredURL)
 def update_url(
     url_id: int,
-    updated_data: MonitoredURLCreate,  # або окрему Update-схему
+    updated_data: MonitoredURLCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
